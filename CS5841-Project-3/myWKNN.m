@@ -1,21 +1,23 @@
-function [ prediction, bestk, errors ] = myKNN( X, Y, Xtest, k)
-%myKNN uses cross validation approach to determine best value for k
-%   Detailed explanation goes here
+function [prediction, bestlambda] = myWKNN(X, Y, Xtest)
     
     classes = max(Y);
     [m, ~]  = size (X);
-    [ks, ~] = size (k);
-    errors = zeros(ks,1);
-    for ki = 1 : ks
-        errors(ki) = leaveOneOut(X, Y, k(ki));
+    bestk = 29;
+    errors = zeros(10,1);
+    for lams = 1:20
+        lam = lams/10;
+        errors(lams) = leaveOneOut(X, Y, bestk);
     end
-    [~,bk] = min(errors);
-    bestk = k(bk);
+    [~,l] = min(errors);
+    min(errors)
+    lam = l/10;
+    bestlambda = lam;
     [testSize,~] = size(Xtest);
     prediction = zeros(testSize,1);
     for t = 1 : testSize
         prediction(t) = classifyX( Xtest(t,:), X, Y, bestk);
     end
+    
     
     function [ errors ] = leaveOneOut( X, Y, k )
        %leaveOneOut performs leave one out cross validation
@@ -34,13 +36,16 @@ function [ prediction, bestk, errors ] = myKNN( X, Y, Xtest, k)
     
     function [ prediction ] = classifyX ( x, X, Y, k ) 
         %classifyX classifies the given X using k nearest neighbors
-        neighbors = findNearestNeighbors( x, X, Y, k );
-        kClass = zeros(classes,1);
-        for neighbor = 1 : k
-            kClass(neighbors(neighbor)) = kClass(neighbors(neighbor)) + 1;
+        nbs = findNearestNeighbors( x, X, Y, k );
+        denom = 0;
+        kC = zeros(classes,1);
+        for nb = 1 : k
+            weight = exp(-lam*nbs(nb,1)^2);
+            kC(nbs(nb,2)) = kC(nbs(nb,2)) + weight;
+            denom = denom + weight;
         end
-        kClass = kClass ./ k;
-        [~, prediction] = max(kClass);
+        kC = kC ./ denom;
+        [~, prediction] = max(kC);
     end
 
     function [ neighbors ] = findNearestNeighbors ( x, X, Y, k )
@@ -62,9 +67,7 @@ function [ prediction, bestk, errors ] = myKNN( X, Y, Xtest, k)
                end
            end
        end
-       neighbors = distances(:,2);
+       neighbors = distances;
     end
 
-
 end
-
