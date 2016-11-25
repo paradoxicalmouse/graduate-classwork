@@ -1,6 +1,0 @@
-function [prediction, alpha, b] = mySVM(K, Y, Kt, dataset)
-
-    switch dataset
-        case 1:
-            C = 
-end

@@ -1,0 +1,183 @@
+Script started on Fri 25 Nov 2016 05:44:23 PM EST
+[?1034h~$ cd /classes/cs4411/code/homework/hw1
+/classes/cs4411/code/homework/hw1$ man file
+[?1049h[?1h=FILE(1)                   BSD General Commands Manual                  FILE(1)[m
+[m
+[1mNAME[0m[m
+     [1mfile[0m — determine file type[m
+[m
+[1mSYNOPSIS[0m[m
+     [1mfile[0m [[1m-bchiklLNnprsvz0[0m] [[1m--apple[0m] [[1m--mime-encoding[0m] [[1m--mime-type[0m][m
+          [[1m-e[0m [4mtestname[24m] [[1m-F[0m [4mseparator[24m] [[1m-f[0m [4mnamefile[24m] [[1m-m[0m [4mmagicfiles[24m] [4mfile[24m [4m...[24m[m
+     [1mfile[0m [1m-C[0m [[1m-m[0m [4mmagicfiles[24m][m
+     [1mfile[0m [[1m--help[0m][m
+[m
+[1mDESCRIPTION[0m[m
+     This manual page documents version 5.11 of the [1mfile[0m command.[m
+[m
+     [1mfile[0m tests each argument in an attempt to classify it.  There are three[m
+     sets of tests, performed in this order: filesystem tests, magic tests,[m
+     and language tests.  The [4mfirst[24m test that succeeds causes the file type to[m
+     be printed.[m
+[m
+     The type printed will usually contain one of the words [4mtext[24m (the file[m
+     contains only printing characters and a few common control characters and[m
+     is probably safe to read on an ASCII terminal), [4mexecutable[24m (the file con‐[m
+     tains the result of compiling a program in a form understandable to some[m
+[7m Manual page file(1) line 1 (press h for help or q to quit)[27m[K[K[?1l>[?1049l/classes/cs4411/code/homework/hw1$ file tictac
+tictac: ELF 32-bit MSB executable, MIPS, MIPS-I version 1 (SYSV), statically linked, not stripped
+/classes/cs4411/code/homework/hw1$ strace -f file tictac 2>&1 | grep open
+open("/usr/lib64/tls/x86_64/libmagic.so.1", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/usr/lib64/tls/libmagic.so.1", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/usr/lib64/x86_64/libmagic.so.1", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/usr/lib64/libmagic.so.1", O_RDONLY|O_CLOEXEC) = 3
+open("/usr/lib64/tls/libz.so.1", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/usr/lib64/libz.so.1", O_RDONLY|O_CLOEXEC) = 3
+open("/usr/lib64/tls/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/usr/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+open("/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = 3
+open("/etc/magic.mgc", O_RDONLY)        = -1 ENOENT (No such file or directory)
+open("/etc/magic", O_RDONLY)            = 3
+open("/usr/share/misc/magic.mgc", O_RDONLY) = 3
+open("/usr/lib64/gconv/gconv-modules.cache", O_RDONLY) = 3
+open("tictac", O_RDONLY)                = 3
+/classes/cs4411/code/homework/hw1$ file blind.o
+blind.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+/classes/cs4411/code/homework/hw1$ nm-[K =g[K[K-g blind.o
+                 U atoi
+0000000000000004 C g
+0000000000000000 T limit
+/classes/cs4411/code/homework/hw1$ cp blind.o ~
+/classes/cs4411/code/homework/hw1$ cp symbols.c ~
+/classes/cs4411/code/homework/hw1$ cd
+~$ gcc -g --static -o symbols symbols.c blind.o
+~$ gdb symbols
+[?1034hGNU gdb (GDB) Red Hat Enterprise Linux 7.6.1-80.el7
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-redhat-linux-gnu".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /home/campus03/tbmorris/symbols...done.
+(gdb) l limit
+1	blind.c: No such file or directory.
+(gdb) l main
+2	#include <stdio.h>
+3	int low;
+4	int high;
+5	
+6	main(int argc, char *argv[])
+7	{
+8	  int *theSum;
+9	  int i;
+10	  low=-10;
+11	  high=+10;
+(gdb) break #[K10
+Breakpoint 1 at 0x400dd0: file symbols.c, line 10.
+(gdb) start [K[K[K[K[K[Krun 10 11
+Starting program: /home/campus03/tbmorris/symbols 10 11
+
+Breakpoint 1, main (argc=3, argv=0x7fffffffe098) at symbols.c:10
+10	  low=-10;
+(gdb) print argv[1]
+$1 = 0x7fffffffe378 "10"
+(gdb) s\[K
+11	  high=+10;
+(gdb) s
+12	  theSum=malloc(sizeof(int));
+(gdb) s
+13	  *theSum=0;
+(gdb) s
+14	  for (i=1;i<argc;i++) {
+(gdb) s
+15	        *theSum=*theSum+limit(low,high,argv[i]);
+(gdb) s
+limit (low=-10, high=10, str=0x7fffffffe378 "10") at blind.c:7
+7	blind.c: No such file or directory.
+(gdb) info frame
+Stack level 0, frame at 0x7fffffffdf80:
+ rip = 0x400e82 in limit (blind.c:7); saved rip 0x400e3c
+ called by frame at 0x7fffffffdfc0
+ source language c.
+ Arglist at 0x7fffffffdf70, args: low=-10, high=10, str=0x7fffffffe378 "10"
+ Locals at 0x7fffffffdf70, Previous frame's sp is 0x7fffffffdf80
+ Saved registers:
+  rbp at 0x7fffffffdf70, rip at 0x7fffffffdf78
+(gdb) x/x [K[Ks 0x7fffffffe378
+0x7fffffffe378:	"10"
+(gdb) help x
+Examine memory: x/FMT ADDRESS.
+ADDRESS is an expression for the memory address to examine.
+FMT is a repeat count followed by a format letter and a size letter.
+Format letters are o(octal), x(hex), d(decimal), u(unsigned decimal),
+  t(binary), f(float), a(address), i(instruction), c(char) and s(string).
+Size letters are b(byte), h(halfword), w(word), g(giant, 8 bytes).
+The specified number of objects of the specified size are printed
+according to the format.
+
+Defaults for format and size letters are those previously used.
+Default count is 1.  Default address is following last thing printed
+with this command or "print".
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x0000000000400dc0 <+0>:	push   %rbp
+   0x0000000000400dc1 <+1>:	mov    %rsp,%rbp
+   0x0000000000400dc4 <+4>:	push   %rbx
+   0x0000000000400dc5 <+5>:	sub    $0x28,%rsp
+   0x0000000000400dc9 <+9>:	mov    %edi,-0x24(%rbp)
+   0x0000000000400dcc <+12>:	mov    %rsi,-0x30(%rbp)
+   0x0000000000400dd0 <+16>:	movl   $0xfffffff6,0x2bcc82(%rip)        # 0x6bda5c <low>
+   0x0000000000400dda <+26>:	movl   $0xa,0x2bcc74(%rip)        # 0x6bda58 <high>
+   0x0000000000400de4 <+36>:	mov    $0x4,%edi
+   0x0000000000400de9 <+41>:	callq  0x4080d0 <malloc>
+   0x0000000000400dee <+46>:	mov    %rax,-0x20(%rbp)
+   0x0000000000400df2 <+50>:	mov    -0x20(%rbp),%rax
+   0x0000000000400df6 <+54>:	movl   $0x0,(%rax)
+   0x0000000000400dfc <+60>:	movl   $0x1,-0x14(%rbp)
+   0x0000000000400e03 <+67>:	jmp    0x400e49 <main+137>
+   0x0000000000400e05 <+69>:	mov    -0x20(%rbp),%rax
+   0x0000000000400e09 <+73>:	mov    (%rax),%ebx
+   0x0000000000400e0b <+75>:	mov    -0x14(%rbp),%eax
+   0x0000000000400e0e <+78>:	cltq   
+   0x0000000000400e10 <+80>:	lea    0x0(,%rax,8),%rdx
+---Type <return> to continue, or q <return> to quit---
+   0x0000000000400e18 <+88>:	mov    -0x30(%rbp),%rax
+   0x0000000000400e1c <+92>:	add    %rdx,%rax
+   0x0000000000400e1f <+95>:	mov    (%rax),%rdx
+   0x0000000000400e22 <+98>:	mov    0x2bcc30(%rip),%ecx        # 0x6bda58 <high>
+   0x0000000000400e28 <+104>:	mov    0x2bcc2e(%rip),%eax        # 0x6bda5c <low>
+   0x0000000000400e2e <+110>:	mov    %ecx,%esi
+   0x0000000000400e30 <+112>:	mov    %eax,%edi
+   0x0000000000400e32 <+114>:	mov    $0x0,%eax
+   0x0000000000400e37 <+119>:	callq  0x400e70 <limit>
+   0x0000000000400e3c <+124>:	lea    (%rbx,%rax,1),%edx
+   0x0000000000400e3f <+127>:	mov    -0x20(%rbp),%rax
+   0x0000000000400e43 <+131>:	mov    %edx,(%rax)
+   0x0000000000400e45 <+133>:	addl   $0x1,-0x14(%rbp)
+   0x0000000000400e49 <+137>:	mov    -0x14(%rbp),%eax
+   0x0000000000400e4c <+140>:	cmp    -0x24(%rbp),%eax
+   0x0000000000400e4f <+143>:	jl     0x400e05 <main+69>
+   0x0000000000400e51 <+145>:	mov    -0x20(%rbp),%rax
+   0x0000000000400e55 <+149>:	mov    %rax,%rsi
+   0x0000000000400e58 <+152>:	mov    $0x490250,%edi
+   0x0000000000400e5d <+157>:	mov    $0x0,%eax
+   0x0000000000400e62 <+162>:	callq  0x401fe0 <printf>
+---Type <return> to continue, or q <return> to quit---
+   0x0000000000400e67 <+167>:	add    $0x28,%rsp
+   0x0000000000400e6b <+171>:	pop    %rbx
+   0x0000000000400e6c <+172>:	pop    %rbp
+   0x0000000000400e6d <+173>:	retq   
+End of assembler dump.
+(gdb) q
+A debugging session is active.
+
+	Inferior 1 [process 28607] will be killed.
+
+Quit anyway? (y or n) y
+~$ exit
+exit
+
+Script done on Fri 25 Nov 2016 05:56:16 PM EST
