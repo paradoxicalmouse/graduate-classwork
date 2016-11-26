@@ -64,6 +64,17 @@ printf & undefined\\
 \end{enumerate}
 \item[(f)] blind.o is an ELF relocatable, or object file, not yet compiled to be executable.
 \item[(g)] 
+\begin{enumerate}
+\item atoi - undefined symbol
+\item g - uninitialized data, treated as undefined, but appears in heap.
+\item limit - defined, appears in code section
 \end{enumerate}
+\item[(j)] We do not have the source code for limit; it was defined in blind.o.
+\item[(l)] argv[1] is a string, or char[].
+\item[(m)] It took 6 steps after the breakpoint. The values in the argument list are: the integer low at -10, integer high at 10, and str with a value of "10".
+\item[(n)] x reformats an input, in this case from hex to string. The value printed out was "10"
+\item[(o)] The address of the statement immediately following limit is  0x0000000000400e3c. The statement will be executed 3 times.
+\end{enumerate}
+\item 
 \end{enumerate}
 \end{document}
