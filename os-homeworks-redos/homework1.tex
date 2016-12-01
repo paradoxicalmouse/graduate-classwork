@@ -11,6 +11,8 @@
 {\huge\noindent\@title\large\\\@author\\\@date}
 \makeatother
 \begin{enumerate}
+
+%Question 1
 \item
 \begin{enumerate}
 \item The activation record is the data structure which stores information used by a function: the return address, parameters, and local variables and is found on the stack.
@@ -32,6 +34,8 @@ printf & undefined\\
 \hline\hline
 \end{tabular}
 \end{enumerate}
+
+%Question 2
 \item 
 \begin{enumerate}
 \item[(c)] file runs filesystem tests, magic tests, and language tests. Assuming object file named a.out for magic file list
@@ -75,6 +79,10 @@ printf & undefined\\
 \item[(n)] x reformats an input, in this case from hex to string. The value printed out was "10"
 \item[(o)] The address of the statement immediately following limit is  0x0000000000400e3c. The statement will be executed 3 times.
 \end{enumerate}
-\item 
+
+%Question 3
+\item The user program calls the system call as if it were a user procedure. The user procedure then calls a kernel stub. The kernel stub stores the arguments to their registers and the system call's code to a special register - this is later refered to by the kernel to decide which call to use - and traps to the kernel. The kernel then refers to the arguments and system call code stored earlier to execute the call before returning control to the handler to hand back to the user program.
+
+%Question 4
 \end{enumerate}
 \end{document}
