@@ -84,5 +84,28 @@ printf & undefined\\
 \item The user program calls the system call as if it were a user procedure. The user procedure then calls a kernel stub. The kernel stub stores the arguments to their registers and the system call's code to a special register - this is later refered to by the kernel to decide which call to use - and traps to the kernel. The kernel then refers to the arguments and system call code stored earlier to execute the call before returning control to the handler to hand back to the user program.
 
 %Question 4
+\item Execution in user mode is very restricted versus execution in system mode. In user mode, the addresses which can be accessed are limited by special base and bound registers or by virtual addresses, which keep the user process from affecting memory in locations it shouldn't reach. Additionally, the user mode cannot access certain privileged instructions and must turn over control to the system to call these instructions. These privileged instructions add a layer of security, keeping the user mode process from performing potentially harmful operations or accessing private data.
+
+If the user mode process needs a privileged instruction to be executed, it hands over the control to the system mode. In the x86 system, the mode switch takes the following steps: first, the operating sytem stops interrupts from happening during the mode switch (deferring them instead until later); next, the system saves key values from registers to temporary hardware registers; then, it switches the stack pointer to the kernel stack using a special hardware register's value; once on the kernel stack, the key values are pushed onto the stack; at this point, the system saves the error code (if there is one) to the top of the stack, and a dummy variable to the top of the stack if there isn't an error code; finally, the hardware changes the program counter to the interrupt handler. Because these operations are hard operations in the hardware, they cannot be tampered with by user processes.
+
+%Question 5
+\item Kill will be raised from PID 1000. Kill is sent to PID 2000. The handler receives what system call it is, along with the arguments sent into the call. For this instance, the system call is a kill routine. Assuming process 2000 is a currently running process: Once in the handler, the operating system must transfer the process state that had been saved from PID 2000 when PID 2000 became in active to its signal stack and exits kernel mode and places the program pointer at the beginning of the process signal handler. 
+
+%Question 6
+\item \begin{enumerate}
+\item Switch stack pointer to process interrupt stack
+\item Push program counter and other key values onto stack
+\item Push register values onto stack
+\item Switch to new context
+\item Pop register values from new context's interrupt stack
+\item Pop program counter and other key values off stack
+\item Switch program counter to being the new context 
+\end{enumerate}
+
+%Question 7
+\item The output from this program is deterministic with the output
+
+intA 2 intB 4 \newline
+intA 2 intB 4 
 \end{enumerate}
 \end{document}
