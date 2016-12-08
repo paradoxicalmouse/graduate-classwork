@@ -13,7 +13,22 @@
 \begin{enumerate}
 
 %Question 1
-\item 
+\item One benefit of contiguous allocation is that read requests are significantly 
+faster for requests of sequential blocks as compared to requests of non-sequential 
+blocks. Additional benefits is that it would be more memory efficient to keep track of 
+all the blocks of a file over separated blocks, as the system then only has to track
+one range per file, instead of several. Contiguous allocation is rarely use because
+files are commonly deleted and resized, meaning that a contiguous allocation would end
+up wasting space - you would need a contiguous block of exactly the right size in order
+for the contiguous allocation to work and not be wasting space - i.e. say you have 200
+blocks of memory free in a row, but have 190 blocks of information to store there. Now,
+you only have 10 blocks of memory free in that location. As that free value gets smaller,
+nothing will be able to fill the free space. Repeated several times throughout the drive,
+you could end up with hundreds of blocks of wasted memory. Additionally, contiguous
+allocation requires there to actually be contiguous blocks, making it difficult to store
+information as the drive gets full.
+
+
 
 \end{enumerate}
 \end{document}
