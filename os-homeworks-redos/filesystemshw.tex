@@ -41,12 +41,12 @@ information as the drive gets full.
 \item Symbolic link:
 \end{enumerate}
 
-Data blocks associated with directory files are as follows
-\begin{tabular}[|c|c|c|c|c|c|]
+Data blocks associated with directory files are as follows\\
+\begin{tabular}{|c|c|c|c|c|c|}
 \hline
-Starting Byte & 0 & 4 & 6 & 7 & 8 \\
+Bytes & 0-3 & 4-5 & 6-6 & 7-7 & 8-(8+N-1) \\
 \hline
-Field & Inode & Size of Entry & Name length & type indicator & name characters
+Field & Inode & Size of Entry & Name length & file type & name\\
 \hline
 \end{tabular}
 %Question 3
