@@ -1,0 +1,115 @@
+\documentclass[12pt,letterpaper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=1in,right=1in,top=1in,bottom=1in]{geometry}
+\author{Taylor B. Morris}
+\title{OS RTS Homework Re-Do}
+\begin{document}
+\makeatletter
+{\huge\noindent\@title\large\\\@author\\\@date}
+\makeatother
+\begin{enumerate}
+
+%Question 1
+\item
+\begin{enumerate}
+\item $T_{minor}$ is the greatest common divisor between the periods, $3$.
+\item $T_{major}$ is the least common multiple between the periods, $12$.
+\item There are $T_{major}/T_{minor}=4$ slots in the major cycle.
+\item For $\tau_1$, only $1$ slot may pass after time $0$ before it is scheduled again. For $\tau_2$, $2$ slots may pass after time $0$ before it is scheduled again. Finally, $4$ slots may pass after time $0$ before $\tau_3$ is scheduled again.
+\item Yes, a feasible schedule exists. Slot bounds indicated by a horizontal line.\\
+\begin{tabular}{|c|c|}
+\hline
+Time Unit & Task \\
+\hline
+0-0 & $\tau_1$ \\
+1-2 & $\tau_2$ \\
+\hline
+3-3 & $\tau_1$ \\
+4-5 & $\tau_3$ \\
+\hline 
+6-6 & $\tau_1$ \\
+7-8 & $\tau_2$ \\
+\hline
+9-9 & $\tau_1$ \\
+10-11 & \\
+\hline
+\end{tabular}
+\item Function in table form below.\\
+\begin{tabular}{|c||c|c|c|}
+\hline
+Time & $\tau_1$ & $\tau_2$ & $\tau_3$ \\
+\hline\hline
+0 & 1 & 0 & 0\\
+1 & 0 & 1 & 0\\
+2 & 0 & 1 & 0\\
+3 & 1 & 0 & 0\\
+4 & 0 & 0 & 1\\
+5 & 0 & 0 & 1\\
+6 & 1 & 0 & 0\\
+7 & 0 & 1 & 0\\
+8 & 0 & 1 & 0\\
+9 & 1 & 0 & 0\\
+10 & 0 & 0 & 0\\
+11 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+\end{enumerate}
+
+\item \begin{enumerate}
+\item $\tau_2$ should have the highest priority, assuming RM or DM, as it has the smallest period.
+\item $\tau_1$ should have the lowest priority, assuming RM or DM, as it has the largest period.
+\item The load is $\sum_i C_i/\tau_i=2/8 + 2/6= 7/12$.
+\item Yes, they have a feasible static priority assignment. Assigning priorities with $\tau_2$ having the highest priority and $\tau_1$ having the lowest priority will obviously give a static priority assignment, both completing in 4 time blocks total, well before their deadline of the next scheduling.
+\item Adding in $\tau_3$ will still have a static priority assignment which works, since making $\tau_3$ highest, followed by $\tau_2$, followed by $\tau_1$ will work.
+\end{enumerate}
+\item
+\begin{enumerate}
+\item The load is $1/4 + 3/6 + 2/8=1$. Since the load is (less than or) equal to 1, the task has a feasible EDF schedule.
+\item EDF schedule shown below:\\
+\begin{tabular}{|c|c|}
+\hline 
+Time & Task\\
+\hline
+0 & $\tau_1$\\
+1 & $\tau_2$\\
+2 & $\tau_2$\\
+3 & $\tau_2$\\
+4 & $\tau_1$\\
+5 & $\tau_3$\\
+6 & $\tau_3$\\
+7 & $\tau_2$\\
+8 & $\tau_1$\\
+9 & $\tau_2$\\
+10 & $\tau_2$\\
+11 & $\tau_3$\\
+12 & $\tau_1$\\
+13 & $\tau_3$\\
+14 & $\tau_2$\\
+15 & $\tau_2$\\
+16 & $\tau_2$\\
+17 & $\tau_1$\\
+18 & $\tau_3$\\
+19 & $\tau_3$\\
+20 & $\tau_1$\\
+21 & $\tau_2$\\
+22 & $\tau_2$\\
+23 & $\tau_2$\\
+\hline
+\end{tabular}
+\end{enumerate}
+\item \begin{enumerate}
+\item The priority of each process under Deadline Monotonic scheduling is its deadline, where lower deadlines (closer deadlines) have higher priority. Let 1 be top priority, and so on. So, $\tau_1$ would have priority 2, $\tau_2$ priority 1, and $\tau_3$ priority 3. 
+\item Let $R_i$ be the response time of the $i^{th}$ task. Then, $R_1=3$, $R_2=2$, and $R_3=10$
+\item No, a feasible deadline monotonic schedule doesn't exist, as $R_3 > D_3$.
+\end{enumerate}
+\item For this problem, I will assume P and V are instantaneous and atomic. 
+\begin{enumerate}
+\item The finish time for $\tau_1$ will be at the 17 second mark, $\tau_2$ at the 9 second mark, and $\tau_3$ at the 18 second mark.
+\item The finish times will be $\tau_1$ at the 15 second mark, $\tau_2$ at the 17 second mark, and $\tau_3$ at the 18 second mark. 
+\item The finish times will be $\tau_1$ at the 12 second mark, $\tau_2$ at the 16 second mark, and $\tau_3$ at the 18 second mark. 
+\end{enumerate}
+\end{enumerate}
+\end{document}
