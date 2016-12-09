@@ -50,7 +50,7 @@ Field & Inode & Size of Entry & Name length & file type & name\\
 \hline
 \end{tabular}
 %Question 3
-\item
+\item Assuming typical inode structure with 12 direct pointers, 1 indirect, 1 double indirect and 1 triple indirect. First, the 12 direct pointers give us $12 * 2^{10} = 12288$ bytes. Then, the indirect pointer gives us $\frac{1024^2}{4} = 262144$ bytes. Next, the double indirect pointer gives $\frac{1024^3}{4^2} = 67108864$ bytes. Finally, the triple indirect gives $\frac{1024^4}{4^3} = 17179869184$. That leaves us with a total of $17247252480$ bytes.
 
 %Question 4
 \item
