@@ -53,8 +53,22 @@ Field & Inode & Size of Entry & Name length & file type & name\\
 \item Assuming typical inode structure with 12 direct pointers, 1 indirect, 1 double indirect and 1 triple indirect. First, the 12 direct pointers give us $12 * 2^{10} = 12288$ bytes. Then, the indirect pointer gives us $\frac{1024^2}{4} = 262144$ bytes. Next, the double indirect pointer gives $\frac{1024^3}{4^2} = 67108864$ bytes. Finally, the triple indirect gives $\frac{1024^4}{4^3} = 17179869184$. That leaves us with a total of $17247252480$ bytes.
 
 %Question 4
-\item
-
+\item After the sequence of operations, the following is true:
+\begin{enumerate}
+\item The superblock would have to be modified to update the number of free blocks and
+inodes.
+\item The block bitmap would have to be modified to indicate the now used blocks
+\item Since we create a new file, the file has an inode assigned to it, and, thus,
+the inode bitmap must be modified to mark the inode as used.
+\item The Inode table needs to have one of its inodes modified to act as the inode of the
+file. 
+\item Data blocks will have to be modified to store the "Small string." texts
+\end{enumerate}
+Assuming a character takes 1 byte, the file will write 130 bytes of data. So, 1 data block
+will need to be allocated, to make space for the information. Additionally, 1 inode will be
+allocated to hold the file information. However, no directory blocks will need to be
+allocated, as the directories affected occupy only 1 data block both before and after the
+file's modificiations. 
 %Question 5
 \item
 
