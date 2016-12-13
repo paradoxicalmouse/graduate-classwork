@@ -78,7 +78,9 @@ causing it to have to wait an entire rotation before the data could be read agai
 Due to this extra rotation, this would likely slow down the file system. 
 
 %Question 6
-\item 
+\item 5 inodes need to be read: home/, csdept/, jmayo/, cs4411/, hw.txt. Including the 
+inodes, 9 disk blocks will need to be read in order to get every inode. A minimum of
+4 directory data blocks would need to be read.   
 
 %Question 7
 \item
