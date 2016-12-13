@@ -83,10 +83,16 @@ inodes, 9 disk blocks will need to be read in order to get every inode. A minimu
 4 directory data blocks would need to be read.   
 
 %Question 7
-\item
+\item The maximum number of keys a tree of degree 2 can contain in a single node is 
+2(2-1) or 2 keys. Every node other than the root must contain at least 1 key. An internal
+node can have at most 4 children. Note: images for tree separate.
 
 %Question 8
-\item
+\item The maximum height is determined by the equation $h\leq \log_{t}\frac{n+1}{2}$ where
+h is height, t is the minimum degree, and n is the number of keys. To find the number of
+keys, we multiply the number of nodes by the maximum number of keys per node, or 
+$n = 2*10^6(2*10^2 - 1)$. Since a partial height doesn't make sense, we take the ceiling
+of the log function to get a maximum height of 5.  
 
 
 
