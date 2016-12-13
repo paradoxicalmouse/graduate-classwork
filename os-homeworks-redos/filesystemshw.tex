@@ -70,10 +70,15 @@ allocated to hold the file information. However, no directory blocks will need t
 allocated, as the directories affected occupy only 1 data block both before and after the
 file's modificiations. 
 %Question 5
-\item
+\item If data for very small ordinary files was kept in the inode's area reserved for block
+pointers, the system would need some way of determining whether or not the area was being
+used for block pointers or the file's data. This would require sending it through some sort
+of check in the processor. During this check, however, the drive would still be running,
+causing it to have to wait an entire rotation before the data could be read again.
+Due to this extra rotation, this would likely slow down the file system. 
 
 %Question 6
-\item
+\item 
 
 %Question 7
 \item
