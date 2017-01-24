@@ -1,0 +1,53 @@
+\documentclass{article}
+\author{Taylor B. Morris}
+\title{Project 4 - Derivations}
+\date{\today}
+\begin{document}
+\maketitle
+
+For kernel logistic regression, we start with the formulas for regularized linear logistic 
+regression,
+$$P(y|x) = \frac{1}{1+\exp(-yi(w^Tx+b))}$$ 
+which gives 
+$$w^* = \min_w \frac{\lambda}{2}\|w\|^2 + \sum_{i=1}^n \ln(1+\exp(-y(w^Tx_i+b)))$$
+Let $g(\xi) = \ln(1+e^\xi)$. Then we have 
+$$\min \frac{\lambda}{2}\|w\|^2 + \sum_{i=1}^n g(\xi_i)$$
+With the constraint
+$$\xi_i =  -y_i(w^Tx_i + b)$$
+We can now form the Lagrangian as 
+$$L = \frac{\lambda}{2}\|w\|^2 + \sum_ig(\xi)+\sum_i\alpha_i\left[-\xi-y_i(w^Tx_i+b)\right]$$
+Taking the partial derivative with respect to $w$, we get
+$$\Delta_wL = \lambda w - \sum_i\alpha_iy_ix_i $$
+Next, setting to 0 and solving for $w$,
+$$w = \frac{1}{\lambda}\sum_i \alpha_i y_i x_i$$
+Next, by taking the derivative with respect to $b$, we obtain
+$$\Delta_b L = \sum_i\alpha_iy_i = 0$$
+Now, taking the partial derivative with respect to $\xi$, we get
+$$\Delta_\xi L = g'(\xi_i)-\alpha_i$$
+Setting this to 0, 
+$$g'(\xi_i)=\alpha_i$$
+Remember that, because
+$$g(r) = \ln(1+e^r)$$
+We have
+$$g'(r) = \frac{e^r}{1+e^r}$$
+Now, multiplying up, we have
+$$g'(r)+g'(r)e^r = e^r$$
+$$e^r (1-g'(r))=g'(r)$$
+$$e^r=\frac{g'(r)}{1-g'(r)}$$
+$$r = \ln \frac {g'(r)}{1-g'(r)}=(g')^{-1}(g'(r))$$
+Now, we plug our $\alpha$ and $\xi$ back in, and we get
+$$\xi = g'(\alpha) = \ln \frac{\alpha}{1-\alpha}$$
+Making a new function from the terms in the Lagrangian that feature $\xi$, we have
+$$G(\alpha_i) = g(\xi_i) - \alpha_i\xi_i$$
+To make $G(\alpha_i)$ completely in terms of $\alpha$, we can
+$$G(\alpha_i) = \ln(1+\frac{\alpha_i}{1-\alpha_i})-\alpha_i\ln\frac{\alpha_i}{1-\alpha_i}$$ 
+Now, we can plug some of our information back into the Lagrangian to get 
+$$L = \frac{\lambda}{2}(\frac{1}{\lambda}\sum_i\alpha_iy_ix_i)^2 + \sum_i G(\alpha_i) - \sum_i \alpha_iy_i(\frac{1}{\lambda}\sum_ja_jy_jx_jx_i + b)$$
+Now, because we have the new constraint $\sum_i\alpha_iy_i=0$, we can finish our form as
+$$L = \frac{1}{2\lambda}\sum_i\sum_j\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_i G(\alpha_i) -\frac{1}{\lambda} \sum_i\sum_j \alpha_i\alpha_jy_iy_jx_i^Tx_j$$
+Now, with our kernel $K(x_i,x_j)=\phi(x_i)^T\phi(x_j)$, we have
+$$\min_\alpha \frac{1}{2\lambda}(\alpha*y)^TK(y*\alpha) + \sum_i G(\alpha_i)$$
+Putting our $w$ back into our probability, we get
+$$p(y_c|x)=\frac{1}{1+\exp(-y_c((\sum_ia_iy_ix_i)x+b)}$$
+Using our test kernel here, we can see
+$$p(y_c|x)=\frac{1}{1+\exp(-y_c((a*y)^TK_t + b)}$$\end{document}

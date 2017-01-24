@@ -1,0 +1,173 @@
+---
+title: "Introduction to R, part C"
+author: "cs4821-s17"
+---
+
+[IntroA](introA.html) | [IntroB](introB.html) | [IntroC](introC.html) | [IntroD](introD.html)
+
+
+## Matrices and Arrays
+
+You may vectorize a series of numbers into a matrix, via setting the dimensions.
+
+```{r}
+m <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+m
+```
+
+```{r}
+dim(m) <- c(2, 5)
+m
+```
+
+A matrix may also be created using the `matrix()` function
+
+```{r}
+m2 <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 2, 5)
+m2
+```
+
+Matrices may be joined by columns `cbind()` or by rows `rbind()`
+
+```{r}
+cbind(m[,c(2,3)], m2[,c(5,3)])
+```
+
+```{r}
+rbind(m[2,c(3,4,5)], c(1,2,3))
+```
+
+
+## Statistical Measures
+
+Load the _mpg_ data set
+
+```{r}
+library(ggplot2)
+data(mpg)
+```
+
+Many statistical measure can be assessed for numeric data: mean, median, min, max, and range of a variable 
+
+```{r}
+mean(mpg$hwy)
+```
+
+```{r}
+median(mpg$hwy)
+```
+
+```{r}
+min(mpg$hwy)
+max(mpg$hwy)
+```
+
+```{r}
+range(mpg$hwy)
+```
+
+The standard deviation, variance, and correlation may also be calculated
+
+```{r}
+sd(mpg$hwy)
+var(mpg$hwy)
+cor(mpg$hwy,mpg$cty)
+```
+
+## Random Numbers
+
+Create vectors of random numbers from standard distributions.  
+* Uniform distribution
+* Gaussian distribution
+* Exponential distribution
+* Poisson distribution
+
+```{r}
+runif(10)
+```
+
+Scale the values to be between 0 and 100
+
+```{r}
+runif(10, 0, 100)
+```
+
+Sample a standard Gaussian distribution, mean = 0, std = 1
+
+```{r}
+x <- rnorm(100)
+mean(x)
+sd(x)
+```
+
+Sample a non-standard Gaussian distribution with mean=5, and std = 3
+```{r}
+y <- rnorm(100, 5, 3)
+mean(y)
+sd(y)
+```
+
+```{r}
+rexp(5)
+```
+
+```{r}
+rexp(10,1)
+rexp(10,10)
+```
+
+## Common R functions
+
+* Absolute value: `abs`
+```{r}
+abs(-5)
+```
+* Sign function: `sign`
+```{r}
+sign(-2)
+```
+* Square root: `sqrt`
+```{r}
+sqrt(2)
+```
+* Logarithms: `log`, `log2`, `log10`, `logb`
+```{r}
+log(100)
+```
+```{r}
+log2(16)
+```
+
+* Exponential: `exp`
+```{r}
+exp(1)
+```
+* Floor: `floor`
+```{r}
+floor(8.543)
+```
+* Ceil: `ceil`
+```{r}
+ceiling(8.543)
+```
+* Truncate: `trunc`
+```{r}
+trunc(8.543)
+```
+* Round: `round`
+```{r}
+round(8.543)
+```
+* Round to significant digits: `signif`
+```{r}
+signif(3.14159,3)
+```
+* Trigonometric functions: `sin`, `asin`, `cos`, `acos`, `tan`, `atan`
+```{r}
+c(sin(45), cos(45), tan(45))
+```
+* Mod operations: `%/%`,  `%%`
+```{r}
+c(10%/%3,  10%%3)
+```
+

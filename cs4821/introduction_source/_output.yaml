@@ -1,0 +1,9 @@
+html_document:
+  self_contained: true
+  theme: null
+  css: min.css
+  highlight: null
+  mathjax: null
+  toc_depth: 2
+  includes:
+    after_body: after_body.html 

@@ -1,0 +1,93 @@
+---
+title: "P1_Morris_Taylor"
+author: "Taylor B. Morris"
+date: "January 19, 2017"
+output:
+  html_document:
+    css: min.css
+    highlight: textmate
+    theme: null
+  pdf_document: default
+---
+# Question 1
+Classification distinguishes, or classifies, data by discrete categorical values whereas regression predicts a continuous value given input. Both procedures accept continuous and discrete features. 
+
+# Q2
+
+
+
+```{r}
+adultHtml<-"http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data"
+adult <- read.table(adultHtml, sep=',',header=F, na.strings = " ?")
+names(adult) <- c("age","workclass","fnlwgt","education","education-num","marital-status",
+                  "occupation","relationship","race","sex", "capital-gain", 
+                  "capital-loss","hours-per-week","native-country","class")
+```
+
+
+## Q2a
+
+Information on each variable:
+
+* __age__: Age is the integer age of this adult as reported in the 1994 census. 
+* __workclass__: Workclass describes what type of employment this adult has as of the 1994 census; the value is reported as a nominal descriptor.
+* __fnlwgt__: The final sampling weight is described by fnlwgt; fnlwgt is a continuous value.
+* __education__: The level of education is described using a ordinal representation such as Bachelors or Some-college.
+* __education-num__: The level of education as described using a continuous value (an integer) to represent the education level. 
+* __marital-status__: Marital-status describes the marital status of the adult as of the 1994 census using a nominal representation.
+* __occupation__: The occupation of the adult refers to their field of employment; for example, Tech-support or Craft-repair are sample nominal representations used.
+* __relationship__: Relationship represents the relationship between this adult and another adult from the other adult's perspective using a nominal representation.
+* __race__: The race attribute describes which racial group the individual identifies as using a nominal descriptor.
+* __sex__: Sex is a binary attribute differentiating male and female adults.
+* __capital-gain__: Capital-gain describes the profits the individual has made from investments and is described using an integer dollar amount.
+* __capital-loss__: Capital-loss describes any losses due to underselling investments as a integer dollar amount.
+* __hours-per-week__: Hours-per-week is an integer value representing the number of hours reported to work a week by this individual.
+* __native-country__: The native-country attribute is a nominal attribute describing the individual's native - or home - country.
+
+
+## Q2b
+
+Information on missing data:
+```{r fig.width=7, fig.height=5}
+n <- nrow(adult)
+sapply(adult, function(x) sum(is.na(x))/n)
+
+```
+
+
+## Q2c
+
+Information on variable types:
+
+* __Numeric__: age, fnlwgt, education-num, capital-gain, capital-loss, hours-per-week
+* __Categorical__: workclass, eduction, marital-status, occupation, relationship, race, sex, native-country, class
+
+## Q2d
+
+Numeric variable exploration for age and education-num
+
+```{r fig.width=7, fig.height=5}
+age.distinct <- length(unique(adult$age))
+if ( age.distinct < 50 ) {
+  hist(adult$age, breaks=unique(adult$age),xlab="Age", 
+     main="Histogram of Age")
+} else {
+  hist(adult$age, breaks=99,xlab="Age", 
+     main="Histogram of Age")
+}
+```
+
+Total number of distinct values for age: `r age.distinct`
+
+```{r fig.width=7, fig.height=5}
+educationnum.distinct <- length(unique(adult$"education-num"))
+if ( educationnum.distinct < 50 ) {
+  hist(adult$"education-num", breaks=unique(adult$"education-num"),xlab="Education-Num", 
+     main="Histogram of Education-Num")
+} else {
+  hist(adult$"education-num", breaks=99,xlab="Education-Num", 
+     main="Histogram of Education-Num")
+}
+```
+
+Total number of distinct values for education-num: `r educationnum.distinct`

@@ -1,0 +1,249 @@
+---
+title: "Introduction to R, part A"
+author: "cs4821-s17"
+---
+
+[IntroA](introA.html) | [IntroB](introB.html) | [IntroC](introC.html) | [IntroD](introD.html)
+
+
+
+## Installation and Setup
+
+[RStudio](http://www.rstudio.com/ide/) was used to construct the example activity.  The examples will be described and made available using [R Markdown](http://www.rstudio.com/ide/docs/r_markdown) (integrates [Markdown](http://daringfireball.net/projects/markdown), a simple formatting syntax for web pages, with R scripts) and [Sweave](http://www.statistik.lmu.de/~leisch/Sweave/) (integrates LaTeX, a document formatting syntax, with R scripts).  R Studio allows easy use and creation of these documents, but requires the [knitr](http://yihui.github.com/knitr/) R package.
+
+The knitr package can be installed via:
+```{r, eval=FALSE}
+install.packages('knitr', dependencies=TRUE)
+```
+
+On the MTU lab machines, it will first try to install the package to the network drive, then ask to install the package to a local library (accept this choice).
+
+
+# Basic R Usage
+
+The following examples go through using several of R's basic functions
+
+## Arithmetic Operations
+
+```{r}
+5 + 4
+```
+
+The output of this arithmetic operation is the number `9`.  The ## symbol is used to mark that this is an output.  In the R console the double hash does not appear.  The [1] states that 9 is on row 1 (the only row for this object, more on objects next).
+
+```{r}
+(10+13)/14.2
+```
+
+## Objects
+
+Two main concepts exist in R: objects and functions.  Objects associate a name with a storage space; everything in R is stored as an object.  Content may be stored in objects using assignment `<-`.
+ 
+Assignment may use an equal sign `=` but is not recommended.
+
+```{r}
+x <- 5
+x
+```
+
+```{r}
+y <- x^2
+y
+```
+
+```{r}
+sqrt(x)
+```
+
+Every object created stays in memory until deleted.  List all objects in memory using `ls()` or `objects()`.  Objects may be removed with `rm()`
+
+```{r}
+ls()
+```
+
+```{r}
+rm(x)
+```
+
+### Object Types
+
+Objects can have different types. There are four basic types: _characters_, _logical_, _numeric_, and _complex_.  The code above creates numeric objects for `x` and `y`.  The type of an object can be found with the `class()` function. 
+
+```{r}
+class(y)
+```
+
+Character objects can be created by enclosing a string inside single or double quotes.  
+
+```{r}
+a <- "Hello World"
+a
+```
+
+
+## Vectors
+
+The basic data object is a vector.  The objects `x` and `y` from above are vectors containing a single element.
+
+Vectors store elements of the same type.  
+
+A logical object can be created by assigning values of `T`, `F`, `TRUE`, or `FALSE`.
+
+```{r}
+b <- T
+b
+```
+
+The length of a vector is assessed with the function `length()`
+
+```{r}
+length(y)
+```
+
+Vectors can be created with the concatenation function, `c()`, and can contain elements of the same type.  The vectors `v1` and `v2` hold _numeric_ objects and `v3` contains _character_ objects. 
+
+```{r}
+v1 <- c(1, 2, 3, 5)
+v1
+length(v1)
+v2 <- c(2, 3, 5, 4)
+v3 <- c("apple", "banana", "cherry", "date")
+```
+
+### Joining Vectors
+
+Vectors can be combined using the `cbind` and `rbind` functions which binds vectors together as columns or as rows. 
+
+```{r}
+v4 <- cbind(v1, v2)
+v4
+```
+
+```{r}
+v5 <- rbind(v1,v2)
+v5
+```
+
+```{r}
+v6 <- cbind(v1,v3)
+v6
+```
+
+Note, the matrix object created has only one type, _character_, the numbers are shown within quotes.
+
+
+## Functions
+
+Functions do things to objects, where functions may only run on objects of the correct type. 
+
+```{r}
+mean(v3)
+```
+
+Functions also work on vectors
+
+```{r}
+sum(v1)
+```
+
+```{r}
+d <- sqrt(v1^2 + v2^2)
+d
+```
+
+Vectors are indexed using square brackets `[ ]` starting with 1
+```{r}
+v1[1]
+```
+
+## Data Frames
+
+When a matrix of data is desired that contains objects of different types a data frame is used.  
+
+```{r}
+df <- data.frame(v1, v3)
+df
+```
+
+Data frames have column names associated with each column, in this case the name of the vector object.
+
+```{r}
+names(df)
+```
+
+The rows of a data frame may also have names (when not specified the row names default to numeric values). 
+
+```{r}
+row.names(df)
+```
+
+You can assign other values to the row names. 
+
+```{r}
+row.names(df)  <- c("One", "Two", "Three", "Four")
+row.names(df)
+```
+
+## Factors
+
+Factors are a way to store categorical (nominal) data.  A factor has _levels_, possible values, to take. 
+
+```{r}
+g <- c("f", "m", "m", "f", "f", "f", "m")
+g
+```
+
+```{r}
+g <- factor(g)
+g
+```
+
+Look at distribution of possible values
+
+```{r}
+table(g)
+```
+
+A cross-tabulation of several factors can also use the `table()` function
+
+```{r}
+m <- factor(c("cs", "math", "cs", "cs", "math", "math", "cs"))
+table(m,g)
+```
+
+## Sequences
+
+Construct a sequence of values
+
+```{r}
+x <- 1:10
+x
+```
+
+Decreasing sequences may also be created. 
+
+```{r}
+y <- 5:0
+y
+```
+
+Other sequences may be constructed with the `seq()` function
+
+```{r}
+seq(0, 20, by=2)
+```
+
+```{r}
+seq(1, -3, -0.5)
+```
+
+Sequences may also be generated using repeating patterns
+
+```{r}
+rep(3,4)
+```
+
+```{r}
+c(rep(2,3), rep(4,2))
+```
+

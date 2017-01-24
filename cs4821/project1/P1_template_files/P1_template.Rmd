@@ -1,0 +1,52 @@
+---
+title: "P1_template"
+author: "Your Name"
+date: "January 18, 2017"
+output: 
+  html_document:
+    css: min.css
+    theme: null
+    highlight: textmate
+---
+
+Instructions: This is the template you may use to type up your responses to the exercises and the on your own questions. Within RStudeo, to produce a document that you can print out and turn in just click on Knit HTML above. All you need to do to complete the lab is to type up your BRIEF answers and the R code (when necessary) in the spaces provided below. 
+
+To use the min.css formatting, leave the css file mentioned in the YAML section of the document. Otherwise, I suggest a simple Bootstrap theme. 
+
+
+# Question 1
+
+
+# Q2
+
+The census data can be downloaded from the [UCI ML site](http://archive.ics.uci.edu/ml/datasets/Census+Income) and loaded using the `read.csv` command.  Alternatively, it can be read directly from the UCI site (follow the example used in the Exploratory Analysis examples).
+
+```{r}
+adult <- read.csv("../data/adult.data.txt", header=F, na.strings="?")
+```
+
+Inline r code can be inserted as `r adult[1,1]`.  
+This can also be used in a table:
+
+|       |  Var 1              |  Var 3              | 
+|-------|---------------------|---------------------|
+| Mean  | `r mean(adult[,1])` | `r mean(adult[,3])` | 
+| Max   | `r max(adult[,1])`  | `r max(adult[,3])`  | 
+
+## Q2a
+
+Information on each variable:
+
+* __Age__: 
+* __Workclass__:
+* ...
+
+
+```{r fig.width=7, fig.height=5}
+# enter R code for Q2b(ii) in the lines below,
+# before the line with ``` which ends the R code
+
+```
+
+
+The project continues

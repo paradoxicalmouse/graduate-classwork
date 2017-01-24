@@ -1,0 +1,103 @@
+---
+title: "Introduction to R, part B"
+author: "cs4821-s17"
+---
+
+[IntroA](introA.html) | [IntroB](introB.html) | [IntroC](introC.html) | [IntroD](introD.html)
+
+
+## Working with Data 
+
+R has provided a number of built-in data sets.  A list of data sets available can be viewed with:
+
+```{r, eval=FALSE}
+data()
+```
+
+
+## First Installation of Library
+
+Let's explore using R with the _mpg_ data set available in the _ggplot2_ library.  If you have not yet installed this library on your computer/account then you will get the following error: `Error: there is no package called 'ggplot2'`
+
+The first installation is down with the following command:
+
+```{r eval=FALSE}
+install.packages('ggplot2')
+```
+
+Once a package has been installed, then when you desire to use its functions, the library only needs to be loaded. 
+
+```{r}
+library(ggplot2)
+data(mpg)
+```
+
+## Data Set Functions
+
+Information about the data set may be viewed via in the Files/Plot/Packages/Help Panel of RStudio
+```{r, eval=FALSE}
+help(mpg)
+```
+
+A basic summary of the variables can be assessed by
+```{r}
+summary(mpg)
+```
+
+The numeric variables are listed with their minimum, maximum, 1st Quartile (25th percentile), 3rd Quartile (75th percentile), mean and median values.  Nominal variables show the frequency of each attribute values.
+
+An alternative view of the data can be found by
+```{r}
+str(mpg)
+```
+
+The dimensions of the data (rows, columns) can be found by
+```{r}
+dim(mpg)
+```
+
+To look at the raw data, the top of the data matrix can be peeked at with
+```{r}
+head(mpg)
+```
+
+## Indexing (Subscripting)
+
+Any part of the data matrix may be viewed via indexing (also referred to as subscripting)
+```{r}
+mpg[100:109,]
+```
+
+The data columns may be accessed by numeric indexing (the 8th - 11th variables) or by name ('cty', 'hwy', 'fl', 'class')
+```{r}
+mpg[80:85,8:11]
+mpg[80:85,c("cty", "hwy", "fl", "class")]
+```
+
+A single data frame may be indexed
+```{r}
+mpg$hwy[1:20]
+```
+
+Data may be accessed by indicated items to exclude
+```{r}
+mpg[80:85,-1]
+```
+
+```{r}
+mpg[80:85,-c(1,2,3,4,5)]
+```
+
+
+## Basic Plots
+
+Let's try a little visualization:
+```{r fig.width=7, fig.height=5}
+plot(mpg[,c("displ", "cty")])
+```
+
+Or a box plot
+```{r fig.width=7, fig.height=5}
+boxplot(mpg$hwy ~ mpg$year)
+```
+

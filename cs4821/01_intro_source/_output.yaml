@@ -1,0 +1,6 @@
+html_document:
+  theme: null
+  css: min.css
+  highlight: textmate
+  includes: 
+    after_body: after_body.html 

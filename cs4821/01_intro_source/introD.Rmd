@@ -1,0 +1,129 @@
+---
+title: "Introduction to R, part D"
+author: "cs4821-s17"
+---
+
+[IntroA](introA.html) | [IntroB](introB.html) | [IntroC](introC.html) | [IntroD](introD.html)
+
+
+
+The following examples go through using several of R's basic functions.
+
+Load the _mpg_ data set.
+
+```{r}
+library(ggplot2)
+data(mpg)
+```
+
+## Sorting
+
+Sort values using the `sort` function
+```{r}
+x <- mpg$hwy[1:10]
+x
+sort(x)
+```
+
+The ordering of a vector may also be found
+```{r}
+y <- 1:10
+o <- order(x)
+x[o]
+```
+
+```{r}
+y[o]
+```
+
+## Functions
+
+A new function can be defined by assigning the function to the object name.  Let's create a function to calculate standard error.
+
+$$ \text{standard error} = \sqrt{\frac{s^2}{n}} $$
+
+```{r se}
+se <- function(x) {
+  v <- var(x)
+  n <- length(x)
+  return(sqrt(v/n))
+}
+se(c(45, 2, 5, 8, 65, 4))
+```
+
+A function may be used to calculate basis statistics on a vector:
+
+```{r basicstat}
+basic.stats <- function(x, more=F) {
+  stats <- list()
+  
+  clean.x <- x[!is.na(x)]
+  
+  stats$n <- length(x)
+  stats$nNAs <- stats$n - length(clean.x)
+  
+  stats$mean <- mean(clean.x)
+  stats$std <- sd(clean.x)
+  stats$med <- median(clean.x)
+  if (more) {
+    stats$skew <- sum(((clean.x-stats$mean)/stats$std)^3) / 
+      length(clean.x)
+  }
+  unlist(stats)
+}
+basic.stats(c(40, 2, 3, 5, 10, 55, 8, -400))
+```
+
+```{r}
+basic.stats(c(40, 2, 3, 5, 10, 55, 8, -400), more=T)
+```
+
+This example also introduced some program control namely `if` functions
+
+## Program Control
+
+A simple example using _for_ loops
+
+```{r}
+for (i in 1:10) {
+  print(i^2)
+}
+```
+
+```{r}
+for (i in c("red", "green", "blue")) {
+  print(i)
+}
+```
+
+Note, R like vector has many functions that work on vectors. Therefore, vectorized version of calculations and operations are often preferred over loops to ensure efficient code.
+
+```{r}
+i <- 0
+while (i < 10) {
+  print(i)
+  i <- i + 1
+}
+```
+
+## Plotting and Saving Results
+
+Let's look at a basic scatter plot
+
+```{r}
+x = c(1:40)
+y = x*2 + 10 + rnorm(40)*3
+plot(x, y, pch=21, bg="red",
+     main="A Sample Plot", xlab="dep. variable", ylab="ind. variable")
+```
+
+Plots can be saved to several image formats: _png_, _jpeg_, _bmp_, _tiff_.  The plot will be saved in a file: "R-introD-fig1.png"
+
+```{r, include=FALSE}
+png("R-introD-fig1.png")
+plot(x, y, pch=21, bg="red",
+     main="A Sample Plot", xlab="dep. variable", ylab="ind. variable")
+dev.off()
+```
+
+
