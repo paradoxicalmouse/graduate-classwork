@@ -12,18 +12,15 @@ output:
 # Question 1
 Classification distinguishes, or classifies, data by discrete categorical values whereas regression predicts a continuous value given input. Both procedures accept continuous and discrete features. 
 
-# Q2
+# Question 2
 
-
-
-```{r}
+```{r Load Adult Data}
 adultHtml<-"http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data"
 adult <- read.table(adultHtml, sep=',',header=F, na.strings = " ?")
-names(adult) <- c("age","workclass","fnlwgt","education","education-num","marital-status",
-                  "occupation","relationship","race","sex", "capital-gain", 
-                  "capital-loss","hours-per-week","native-country","class")
+names(adult) <- c("age","workclass","fnlwgt","education","education.num","marital.status",
+                  "occupation","relationship","race","sex", "capital.gain", 
+                  "capital.loss","hours.per.week","native.country","class")
 ```
-
 
 ## Q2a
 
@@ -48,10 +45,11 @@ Information on each variable:
 ## Q2b
 
 Information on missing data:
-```{r fig.width=7, fig.height=5}
+```{r Missing data,fig.width=7, fig.height=5}
 n <- nrow(adult)
 sapply(adult, function(x) sum(is.na(x))/n)
-
+# sapply reference:
+# https://discuss.analyticsvidhya.com/t/how-to-count-the-missing-value-in-r/2949/5
 ```
 
 
@@ -64,30 +62,316 @@ Information on variable types:
 
 ## Q2d
 
-Numeric variable exploration for age and education-num
+Numeric variable exploration for age and capital-gain
 
-```{r fig.width=7, fig.height=5}
+```{r Age Histogram,fig.width=7, fig.height=5}
 age.distinct <- length(unique(adult$age))
 if ( age.distinct < 50 ) {
   hist(adult$age, breaks=unique(adult$age),xlab="Age", 
      main="Histogram of Age")
 } else {
-  hist(adult$age, breaks=99,xlab="Age", 
+  hist(adult$age, breaks=49,xlab="Age", 
      main="Histogram of Age")
 }
+# distinct values reference
+# https://discuss.analyticsvidhya.com/t/
+# count-number-of-distinct-values-in-a-column-of-a-data-table-in-r/1124/2
 ```
 
 Total number of distinct values for age: `r age.distinct`
 
-```{r fig.width=7, fig.height=5}
-educationnum.distinct <- length(unique(adult$"education-num"))
-if ( educationnum.distinct < 50 ) {
-  hist(adult$"education-num", breaks=unique(adult$"education-num"),xlab="Education-Num", 
-     main="Histogram of Education-Num")
+```{r Hours-per-Week Histogram, fig.width=7, fig.height=5}
+hours.per.week.distinct <- length(unique(adult$hours.per.week))
+if ( hours.per.week.distinct < 50 ) {
+  hist(adult$hours.per.week, breaks=unique(adult$hours.per.week),xlab="Hours-Per-Week", 
+     main="Histogram of Hours-Per-Week")
 } else {
-  hist(adult$"education-num", breaks=99,xlab="Education-Num", 
-     main="Histogram of Education-Num")
+  hist(adult$hours.per.week, breaks=49,xlab="Hours-Per-Week", 
+     main="Histogram of Hours-Per-Week")
 }
 ```
 
-Total number of distinct values for education-num: `r educationnum.distinct`
+Total number of distinct values for hours-per-week: `r hours.per.week.distinct`
+
+```{r Age Stacked Histogram, fig.width=7, fig.height=5}
+library(ggplot2)
+binSize=(max(adult$age)-min(adult$age))/50
+qplot(age, data=adult , fill=class, geom="histogram", binwidth=binSize,col=I("black"))
+#Stacked histogram reference: https://www.r-bloggers.com/stacked-histogram-with-ggplot2/
+#More qplot reference: https://www.datacamp.com/community/tutorials/make-histogram-ggplot2#gs.H_HE_0w
+```
+
+```{r Hours-per-Week Stacked Histogram, fig.width=7, fig.height=5}
+binSize=(max(adult$hours.per.week)-min(adult$hours.per.week))/50
+qplot(hours.per.week, data=adult , fill=class, geom="histogram", binwidth=binSize,col=I("black"),xlab="hours-per-week")
+
+```
+
+```{r Age Boxplot, fig.width=7, fig.height=5}
+ggplot(data=adult, aes(x=class, y=age)) + 
+             geom_boxplot(aes(fill=class))
+#http://stackoverflow.com/questions/14604439/plot-multiple-boxplot-in-one-graph
+```
+
+```{r Hours-per-Week Boxplot, fig.width=7, fig.height=5}
+ggplot(data=adult, aes(x=class, y=hours.per.week )) + 
+             geom_boxplot(aes(fill=class)) + ylab("hours-per-week")
+```
+
+Based on the plots for age, it looks like more people make more than 50k as they get older. 
+Based on the plots for hours-per-week, it looks like as people work more hours per week, they are more likely to make more than 50k. 
+
+##Q2e
+
+```{r Education level Barplot, fig.width=7, fig.height=5}
+barplot(table(adult$education), main="Education Level",las=2,cex.names=.7,cex.axis =.7)
+#http://stackoverflow.com/questions/9981929/how-to-display-all-x-labels-in-r-barplot
+#http://stats.stackexchange.com/questions/3853/how-to-increase-size-of-label-fonts-in-barplot
+```
+
+```{r Work Class Barplot, fig.width=7, fig.height=5}
+barplot(table(adult$workclass), main="Work Class",las=2,cex.names=.65,cex.axis =.65)
+```
+
+```{r Education Level Stacked Barplot, fig.width=7, fig.height=5}
+barplot(table(adult$class,adult$education), main="Education Level",las=2,cex.names=.7,
+        cex.axis =.7,col=c("darkblue","red"),legend = unique(adult$class))
+#http://www.statmethods.net/graphs/bar.html
+```
+
+```{r Work Class Stacked Barplot, fig.width=7, fig.height=5}
+barplot(table(adult$class,adult$workclass), main="Work Class",las=2,cex.names=.65,
+        cex.axis =.65,col=c("darkblue","red"),legend = unique(adult$class))
+```
+
+Looking at the dataplots, it is apparent that there is no "good" sector to work in to earn more than 50k, as they all have the majority of working people making less than 50k. However, it is apparent that the level of education matters when it comes to making more than 50k. The first signs of large amounts people making more than 50k appear as soon as some college is involved, while graduate schooling moves the numbers to over half of the population at that education level making more than 50k.
+
+##Q2f
+
+```{r Marital Status vs. Age Exploration - Boxplot, fig.width=7, fig.height=7}
+boxplot(adult$age ~ adult$marital.status,las=2,cex.names=.5,
+        cex.axis =.45, main="Marital Status vs. Age")
+```
+
+Marital Status appears to be dependent on age, given the boxplot above. As can be seen, the majority of non-married people are under the age of about 35, as can be seen by its box location. Similarly, the majority of widows are over the age of 50. When it comes to marriage, it appears people in their 20's to 30's are more likely to be in an Armed-Forces related marriage, whereas solely civilian marriages occur after people are in their late 30's. Separation, divorce, and absent spouses also appear more often during this same range. If marital status were not dependent on age, the boxplots would look almost exactly the same next to each other, but there are vast differences across each of the marital status types.
+
+``` {r Hours Per Week vs. Age Exploration, fig.width=7, fig.height=5}
+plot(adult$age,adult$hours.per.week, xlab="Age", ylab="Hours per Week",main="Age vs. Hours per Week")
+```
+
+Hours per week worked appears to be independent of age, unlike what I expected. This can be seen as the points of the scatter plot appear to be evenly spread across the board. There is a bit of blank space after the age of 80, but what points are there are evenly spread across the plot; this blank space is accounted for by the fact that there are likely less points to chart after this age due to deaths. 
+
+# Question 3
+``` {r Load Cars}
+cars <- read.table("Auto.csv", sep=',',header=T, na.strings = "?",quote="")
+```
+
+##Q3a
+Quantitive: mpg, weight, displacement, horsepower, cylinders, acceleration, year
+
+Qualitative: origin, name
+
+##Q3b
+``` {r Quantitive Table}
+#functions: http://www.statmethods.net/management/userfunctions.html
+#http://stackoverflow.com/questions/20997380/creating-a-summary-statistical-table-from-a-data-frame
+#http://stackoverflow.com/questions/17626522/producing-a-new-dataframe-from-an-old-dataframe
+mode <- function (x) {
+  t<-as.data.frame(table(x))
+  return (x[which.max(t[,2])])
+}
+quanTable <- function (x) {
+  c( mean=mean(x), median=median(x), mode=mode(x), range=range(x) )
+}
+temp <- na.omit(data.frame("mpg" = cars$mpg, 
+                  "weight" = cars$weight, 
+                  "displacement" = cars$displacement,
+                  "horsepower" = cars$horsepower,
+                  "cylinders" = cars$cylinders,
+                  "acceleration" = cars$acceleration,
+                  "year" = cars$year) )
+sapply(temp, quanTable)
+```
+
+##Q3c
+``` {r Quantiles - DP} 
+quantile(cars$displacement, probs=c(.25,.37,.89), na.rm=TRUE)
+```
+
+``` {r Quantiles - HP} 
+quantile(cars$horsepower, probs=c(.25,.37,.89), na.rm=TRUE)
+```
+
+##Q3d
+``` {r 5 number summary}
+mySummary <- function (x) {
+  c(Min=min(x), 
+    Q1=quantile(x, probs=.25, na.rm=TRUE, names=FALSE ),
+    Median=median(x),
+    Q3=quantile(x, probs=.75, na.rm=TRUE, names=FALSE ),
+    Max= max(x))
+}
+
+sapply(na.omit(data.frame("hp"=cars$horsepower,"dp"=cars$displacement)),mySummary)
+```
+
+##Q3e
+``` {r Box Plots}
+boxplot(cars$horsepower)
+boxplot(cars$displacement)
+```
+
+##Q3f
+```{r Exploration Chart 1}
+plot(cars$mpg, cars$horsepower)
+plot(cars$mpg, cars$weight)
+plot(cars$mpg, cars$displacement)
+plot(cars$mpg, cars$acceleration)
+boxplot(cars$mpg~cars$cylinders)
+boxplot(cars$mpg~cars$year)
+plot(cars$horsepower,cars$displacement)
+plot(cars$displacement,cars$weight)
+plot(cars$horsepower,cars$year)
+plot(cars$displacement, cars$acceleration)
+boxplot(cars$horsepower~cars$cylinders)
+```
+
+I am particularly suprised by the relation between year and horsepower - I would expect later years to have cars with more horsepower, in general. However, only the earlier years have the highest horsepower values, with the majority of values being mostly consistent between the years. 
+
+None of the other relations seem particularly suprising to me; much of this information just reflects what I've been taught about cars over the years.
+
+##Q3g
+The best predictors of mpg are horsepower, weight, and displacement. These plots show a strong relation between mpg and their particular variable. Looking at the plots, you can actually follow along the scattered points and see where a line could be regressed. 
+
+#Question 4
+```{r Load Tennis Data}
+m.matches <- read.table("charting-m-matches.csv", sep=',',header=T, na.strings = "?",quote="")
+m.stats <- read.table("charting-m-stats-Overview.csv", sep=',',header=T, na.strings = "?",quote="")
+w.matches <- read.table("charting-w-matches.csv", sep=',',header=T, na.strings = "?",quote="")
+w.stats <- read.table("charting-w-stats-Overview.csv", sep=',',header=T, na.strings = "?",quote="")
+```
+##Q4a
+```{r Column Names - Review}
+names(m.matches)
+names(m.stats)
+names(w.matches)
+names(w.stats)
+```
+
+###Men's Top Aces/Match 2011-present, limited tournaments
+First, we limit down the matches to those from 2011 or later that we care about.
+
+```{r Limiting Matches}
+#http://stackoverflow.com/questions/3445590/how-to-extract-a-subset-of-a-data-frame-based-on-a-condition-
+#involving-a-field
+#http://stackoverflow.com/questions/36568070/extract-year-from-date
+
+m.lim.matches <- subset(m.matches, 
+                        (Tournament == "Australian Open" |
+                        Tournament == "French Open" |
+                        Tournament == "Wimbledon" |
+                        Tournament == "US Open" ) &
+                          format(as.Date(Date, format="%Y%m%d"),"%Y") >= 2011
+                        ) 
+```
+
+Now, merging the data from the two files to a useable form
+```{r Merge}
+#http://stackoverflow.com/questions/13774773/
+# check-whether-value-exist-in-one-data-frame-or-not
+m.lim.stats <- subset(m.stats, m.stats$"match_id" %in% m.lim.matches$"match_id")
+m.lim.stats <- merge(m.lim.stats, m.lim.matches, by="match_id")
+
+player1 <- which( m.lim.stats$player == 1 )
+player2 <- which( m.lim.stats$player == 2 )
+m.lim.stats$player[player1] <- sapply(m.lim.stats$Player.1[player1],toString)
+m.lim.stats$player[player2] <- sapply(m.lim.stats$Player.2[player2],toString)
+```
+
+Now, we sort players by their mean aces/match and display the top 5.
+```{r Sort Players by Mean Aces/Match and display}
+#aggregate:
+  #http://stackoverflow.com/questions/11562656/average-data-by-group
+m.aces <- aggregate(aces ~ player,m.lim.stats, mean)
+#http://www.statmethods.net/management/sorting.html
+attach(m.aces)
+m.aces <- m.aces[order(-aces),]
+detach(m.aces)
+m.aces[1:5,]
+```
+
+### Women's Top Aces/Match 2011-present, limited tournaments
+Next, we repeat the process above for the Women's data.
+```{r Aces Per Match Women}
+w.lim.matches <- subset(w.matches, ((Tournament == "Australian Open" |
+                        Tournament == "French Open" |
+                        Tournament == "Wimbledon" |
+                        Tournament == "US Open" ) &
+                          format(as.Date(as.character(Date), format="%Y%m%d"),"%Y") >= 2011))
+w.lim.stats <- subset(w.stats, w.stats$"match_id" %in% w.lim.matches$"match_id")
+w.lim.stats <- merge(w.lim.stats, w.lim.matches, by="match_id")
+player1 <- which( w.lim.stats$player == 1 )
+player2 <- which( w.lim.stats$player == 2 )
+w.lim.stats$player[player1] <- sapply(w.lim.stats$Player.1[player1],toString)
+w.lim.stats$player[player2] <- sapply(w.lim.stats$Player.2[player2],toString)
+w.aces <- aggregate(aces ~ player,w.lim.stats, mean)
+attach(w.aces)
+w.aces <- w.aces[order(-aces),]
+detach(w.aces)
+w.aces[1:5,]
+```
+
+###Men's Top Breakpoint Saved Percentage - 2015
+First, we need to filter and merge as before.
+```{r Filter and Merge}
+m.brk.matches <- subset(m.matches,format(as.Date(as.character(Date), format="%Y%m%d"),"%Y")== 2015)
+m.brk.stats <- subset(m.stats, m.stats$"match_id" %in% m.brk.matches$"match_id")
+m.brk.stats <- merge(m.brk.stats, m.brk.matches, by="match_id")
+player1 <- which( m.brk.stats$player == 1 )
+player2 <- which( m.brk.stats$player == 2 )
+m.brk.stats$player[player1] <- sapply(m.brk.stats$Player.1[player1],toString)
+m.brk.stats$player[player2] <- sapply(m.brk.stats$Player.2[player2],toString)
+
+```
+
+Now, limiting it to the number of players with the right amount of matches played.
+```{r Filter by Number of Matches}
+m.players.qual <- subset(as.data.frame(table(m.brk.stats$player)), Freq >= 5)
+m.brk.stats <- subset(m.brk.stats, player %in% m.players.qual$Var1)
+```
+
+Finally, calculating and displaying our top 5 breakpoint saved percentages.
+```{r}
+m.brk.saved <- aggregate(bp_saved ~ player, m.brk.stats, sum)
+m.brk.tot <- aggregate(bk_pts ~ player, m.brk.stats,sum)
+m.final <- merge(m.brk.saved,m.brk.tot, by="player")
+m.final$perc <- (m.final$bp_saved/m.final$bk_pts)
+m.perc <- data.frame("player"=m.final$player, "percent_saved"=m.final$perc)
+attach(m.perc)
+m.perc <- m.perc[order(-percent_saved),]
+detach(m.perc)
+m.perc[1:5,]
+```
+
+###Women's Top Breakpoint Saved Percentage - 2015
+Here, we repeat what we did above for men.
+```{r Womens Top Breakpoint Saved Percentage}
+w.brk.matches <- subset(w.matches,format(as.Date(as.character(Date), format="%Y%m%d"),"%Y")== 2015)
+w.brk.stats <- subset(w.stats, w.stats$"match_id" %in% w.brk.matches$"match_id")
+w.brk.stats <- merge(w.brk.stats, w.brk.matches, by="match_id")
+player1 <- which( w.brk.stats$player == 1 )
+player2 <- which( w.brk.stats$player == 2 )
+w.brk.stats$player[player1] <- sapply(w.brk.stats$Player.1[player1],toString)
+w.brk.stats$player[player2] <- sapply(w.brk.stats$Player.2[player2],toString)
+w.players.qual <- subset(as.data.frame(table(w.brk.stats$player)), Freq >= 5)
+w.brk.stats <- subset(w.brk.stats, player %in% w.players.qual$Var1)
+w.brk.saved <- aggregate(bp_saved ~ player, w.brk.stats, sum)
+w.brk.tot <- aggregate(bk_pts ~ player, w.brk.stats,sum)
+w.final <- merge(w.brk.saved,w.brk.tot, by="player")
+w.final$perc <- (w.final$bp_saved/w.final$bk_pts)
+w.perc <- data.frame("player"=w.final$player, "percent_saved"=w.final$perc)
+attach(w.perc)
+w.perc <- w.perc[order(-percent_saved),]
+detach(w.perc)
+w.perc[1:5,]
+```
